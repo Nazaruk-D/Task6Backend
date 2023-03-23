@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser')
 const authRouter = require('./authRouter')
 const messagesRouter = require('./messagesRouter')
 const PORT = process.env.PORT || 7542;
+import { wss } from './websocket';
+
 
 export const connection = mysql.createConnection({
     host: 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
@@ -49,6 +51,9 @@ app.get("/", (req, res) => {
     return console.log('Connection closed')
 })
 
+wss.on('listening', () => {
+    console.log(`WebSocket server is listening on port ${wss.options.port}`);
+});
 
 app.listen(PORT, () => {
     console.log(`I started listening port: ${PORT}`)

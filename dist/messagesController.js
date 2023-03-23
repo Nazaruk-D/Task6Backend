@@ -12,27 +12,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./index");
 class messagesController {
     // async fetchMessages(req: any, res: any) {
+    //     const { userName } = req.params
     //     try {
-    //         const getUsersQuery = "SELECT * FROM Users"
-    //         connection.query(getUsersQuery, (error: any, results: any) => {
-    //             if (error) {
-    //                 return res.status(400).json({message: 'Error getting users', statusCode: 400});
-    //             } else {
-    //                 const users = results.map((u: any) => ({
-    //                     ...u,
-    //                     id: u.id,
-    //                     name: u.name,
-    //                     email: u.email,
-    //                     createdAt: u.created_at,
-    //                     loginData: u.last_online,
-    //                     status: u.status,
-    //                 }))
-    //                 return res.status(200).send({message: 'Getting users successfully', data: users, statusCode: 200});
-    //             }
-    //         });
+    //         const messages = `SELECT * FROM Messages WHERE recipient_name='${userName}'`
+    //
+    //         connection.query(messages, (error: any, results: any) => {
+    //             if (error) throw error;
+    //             res.status(201).json({message: 'User registered and login successfully', data: results, statusCode: 201,});
+    //         })
     //     } catch (e) {
     //         console.log(e)
-    //         res.status(400).json({message: 'Get users error', statusCode: 400})
+    //         res.status(400).json({message: 'Get messages error', statusCode: 400})
+    //     }
+    // }
+    // async fetchMessages(ws: any, userName: string) {
+    //     try {
+    //         const messages = `SELECT * FROM Messages WHERE recipient_name='${userName}'`
+    //
+    //         connection.query(messages, (error: any, results: any) => {
+    //             if (error) throw error;
+    //             ws.send(JSON.stringify({message: 'Message transfer was successful', data: results, statusCode: 200}));
+    //         })
+    //     } catch (e) {
+    //         console.log(e)
+    //         ws.send(JSON.stringify({message: 'Get messages error', statusCode: 400}))
     //     }
     // }
     sendMessage(req, res) {
