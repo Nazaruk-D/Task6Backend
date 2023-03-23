@@ -4,8 +4,8 @@ const messagesController = require('./messagesController');
 const messagesRouter = new RouterMessages();
 const usersEndPoints = {
     fetchMessages: '/fetch',
-    deleteMessages: '/delete',
+    sendMessage: '/send',
 };
 messagesRouter.get(usersEndPoints.fetchMessages, messagesController.fetchMessages);
-messagesRouter.delete(usersEndPoints.deleteMessages, messagesController.deleteMessages);
+messagesRouter.post(usersEndPoints.sendMessage, messagesController.sendMessage);
 module.exports = messagesRouter;
