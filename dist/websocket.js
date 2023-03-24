@@ -13,7 +13,8 @@ exports.wss = void 0;
 const WebSocket = require('ws');
 const index_1 = require("./index");
 const PORT = process.env.PORT || 8080;
-exports.wss = new WebSocket.Server({ port: PORT });
+// export const wss = new WebSocket.Server({ port: PORT });
+exports.wss = new WebSocket.Server({ port: PORT, perMessageDeflate: false });
 exports.wss.on('connection', function connection(ws) {
     console.log('client connected');
     ws.on('message', function incoming(data) {

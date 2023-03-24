@@ -41,7 +41,8 @@ const corsOptions = {
 };
 const jsonBodyMiddleWare = express_1.default.json();
 app.use(jsonBodyMiddleWare);
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use('/auth', cors(corsOptions));
 app.use(cookieParser('secret key'));
 app.use('/auth', authRouter);
 app.get("/", (req, res) => {
