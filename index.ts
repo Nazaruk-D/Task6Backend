@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const authRouter = require('./authRouter')
 const PORT = process.env.PORT || 7542;
 import { wss } from './websocket';
+const PORTWS = process.env.PORT || 8080;
 
 
 export const connection = mysql.createConnection({
@@ -65,7 +66,7 @@ app.get("/", (req, res) => {
 })
 
 wss.on('listening', () => {
-    console.log(`WebSocket server is listening on port ${wss.options.port}`);
+    console.log(`WebSocket server is listening on port ${PORTWS}`);
 });
 
 app.listen(PORT, () => {
