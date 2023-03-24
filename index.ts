@@ -39,10 +39,25 @@ const corsOptions = {
 const jsonBodyMiddleWare = express.json()
 
 app.use(jsonBodyMiddleWare)
-// app.use(cors(corsOptions));
-app.use('/auth', cors(corsOptions))
+app.use(cors(corsOptions));
+// app.use('/auth', cors(corsOptions))
+
+// app.use(cors());
+app.use('/ws', (req, res) => {
+    /* обработка запроса WebSocket */
+});
 app.use(cookieParser('secret key'))
 app.use('/auth', authRouter);
+
+
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+});
+
+
+
 
 app.get("/", (req, res) => {
     res.json({message: "hi from Express App"})
