@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.wss = void 0;
 const WebSocket = require('ws');
 const index_1 = require("./index");
-// const PORT = process.env.PORT || 8080;
-exports.wss = new WebSocket.Server({ port: process.env.PORT });
+const PORT = process.env.PORT || 8080;
+exports.wss = new WebSocket.Server({ port: PORT });
 exports.wss.on('connection', function connection(ws) {
     console.log('client connected');
     ws.on('message', function incoming(data) {
