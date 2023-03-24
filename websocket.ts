@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
 import {connection} from "./index";
 
-const PORT = process.env.PORT || 8080;
-export const wss = new WebSocket.Server({ port: PORT });
+// const PORT = process.env.PORT || 8080;
+export const wss = new WebSocket.Server({ port: process.env.PORT });
 
 wss.on('connection', function connection(ws: any) {
     console.log('client connected');
