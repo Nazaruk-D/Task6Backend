@@ -65,11 +65,7 @@ class authController {
                             secure: true,
                             httpOnly: true,
                         });
-                        res.status(200).json({
-                            message: 'Login successful',
-                            user: userData,
-                            statusCode: 200,
-                        });
+                        res.status(200).json({ message: 'Login successful', user: userData, statusCode: 200 });
                     }
                     else {
                         const userRegisterQuery = `INSERT INTO Users (name) VALUES ('${name}')`;
@@ -92,11 +88,7 @@ class authController {
                                     secure: true,
                                     httpOnly: true,
                                 });
-                                res.status(201).json({
-                                    message: 'User registered and login successfully',
-                                    user: userData,
-                                    statusCode: 201,
-                                });
+                                res.status(201).json({ message: 'User registered and login successfully', user: userData, statusCode: 201 });
                             }));
                         }));
                     }

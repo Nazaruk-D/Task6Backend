@@ -10,7 +10,6 @@ const app = (0, express_1.default)();
 const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter');
-const messagesRouter = require('./messagesRouter');
 const PORT = process.env.PORT || 7542;
 const websocket_1 = require("./websocket");
 exports.connection = mysql.createConnection({
@@ -45,7 +44,6 @@ app.use(jsonBodyMiddleWare);
 app.use(cors(corsOptions));
 app.use(cookieParser('secret key'));
 app.use('/auth', authRouter);
-app.use('/messages', messagesRouter);
 app.get("/", (req, res) => {
     res.json({ message: "hi from Express App" });
     return console.log('Connection closed');

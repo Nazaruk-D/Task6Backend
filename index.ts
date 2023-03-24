@@ -4,7 +4,6 @@ const app = express()
 const mysql = require('mysql')
 const cookieParser = require('cookie-parser')
 const authRouter = require('./authRouter')
-const messagesRouter = require('./messagesRouter')
 const PORT = process.env.PORT || 7542;
 import { wss } from './websocket';
 
@@ -43,8 +42,6 @@ app.use(jsonBodyMiddleWare)
 app.use(cors(corsOptions));
 app.use(cookieParser('secret key'))
 app.use('/auth', authRouter);
-app.use('/messages', messagesRouter);
-
 
 app.get("/", (req, res) => {
     res.json({message: "hi from Express App"})

@@ -50,20 +50,14 @@ class authController {
                         secure: true,
                         httpOnly: true,
                     });
-                    res.status(200).json({
-                        message: 'Login successful',
-                        user: userData,
-                        statusCode: 200,
-                    });
+                    res.status(200).json({message: 'Login successful', user: userData, statusCode: 200});
                 } else {
                     const userRegisterQuery = `INSERT INTO Users (name) VALUES ('${name}')`;
                     connection.query(userRegisterQuery, async (error: any, results: any) => {
                         if (error) throw error;
-
                         const newUserQuery = `SELECT * FROM Users WHERE name = '${name}'`;
                         connection.query(newUserQuery, async (error: any, results: any) => {
                             if (error) throw error;
-
                             const user = results[0];
                             const token = jwt.sign({ name: user.name }, 'secret');
                             const userData = {
@@ -76,11 +70,7 @@ class authController {
                                 secure: true,
                                 httpOnly: true,
                             });
-                            res.status(201).json({
-                                message: 'User registered and login successfully',
-                                user: userData,
-                                statusCode: 201,
-                            });
+                            res.status(201).json({message: 'User registered and login successfully', user: userData, statusCode: 201});
                         });
                     });
                 }

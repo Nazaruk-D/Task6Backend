@@ -11,8 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wss = void 0;
 const WebSocket = require('ws');
-exports.wss = new WebSocket.Server({ port: 8080 });
 const index_1 = require("./index");
+const PORT = process.env.PORT || 8080;
+exports.wss = new WebSocket.Server({ port: PORT });
 exports.wss.on('connection', function connection(ws) {
     console.log('client connected');
     ws.on('message', function incoming(data) {
@@ -60,7 +61,6 @@ function fetchUsers(ws) {
             index_1.connection.query(users, (error, results) => {
                 if (error)
                     throw error;
-                // console.log(results)
                 ws.send(JSON.stringify({ action: "fetchUsers", message: 'Users transfer was successful', data: results, statusCode: 200 }));
             });
         }
@@ -74,39 +74,71 @@ function newMessage(ws, obj) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { senderName, recipientName, subject, message } = obj.newObj;
-            const newMessage = `INSERT INTO Messages (sender_name, recipient_name, subject, message) VALUES ('${senderName}', '${recipientName}', '${subject}', '${message}')`;
-            index_1.connection.query(newMessage, (error, res) => __awaiter(this, void 0, void 0, function* () {
-                const query = `SELECT * FROM Messages WHERE id = ${res.insertId}`;
-                const results = yield new Promise((resolve, reject) => {
-                    index_1.connection.query(query, (error, results) => {
+            const userQuery = `SELECT * FROM Users WHERE name = '${recipientName}'`;
+            const userResults = yield new Promise((resolve, reject) => {
+                index_1.connection.query(userQuery, (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(results);
+                    }
+                });
+            });
+            if (userResults.length === 0) {
+                const newUser = `INSERT INTO Users (name) VALUES ('${recipientName}')`;
+                yield new Promise((resolve, reject) => {
+                    index_1.connection.query(newUser, (error, res) => {
                         if (error) {
                             reject(error);
                         }
                         else {
-                            resolve(results);
+                            resolve(res);
                         }
                     });
                 });
-                if (results.length > 0) {
-                    const message = results[0];
-                    const newMessage = {
-                        id: message.id,
-                        sender_name: message.sender_name,
-                        recipient_name: message.recipient_name,
-                        subject: message.subject,
-                        message: message.message,
-                        created_at: message.created_at
-                    };
-                    exports.wss.clients.forEach(function each(client) {
-                        if (client.userName === message.recipient_name) {
-                            client.send(JSON.stringify({ action: "sendMessage", message: 'New message', data: newMessage, statusCode: 200 }));
-                        }
-                    });
-                }
-                else {
-                    ws.send(JSON.stringify({ action: "getMessage", message: "Message not found", statusCode: 404 }));
-                }
-            }));
+            }
+            const newMessage = `INSERT INTO Messages (sender_name, recipient_name, subject, message) VALUES ('${senderName}', '${recipientName}', '${subject}', '${message}')`;
+            const results = yield new Promise((resolve, reject) => {
+                index_1.connection.query(newMessage, (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(results);
+                    }
+                });
+            });
+            const messageQuery = `SELECT * FROM Messages WHERE id = ${results.insertId}`;
+            const messageResults = yield new Promise((resolve, reject) => {
+                index_1.connection.query(messageQuery, (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(results);
+                    }
+                });
+            });
+            if (messageResults.length > 0) {
+                const message = messageResults[0];
+                const newMessage = {
+                    id: message.id,
+                    sender_name: message.sender_name,
+                    recipient_name: message.recipient_name,
+                    subject: message.subject,
+                    message: message.message,
+                    created_at: message.created_at
+                };
+                exports.wss.clients.forEach(function each(client) {
+                    if (client.userName === message.recipient_name) {
+                        client.send(JSON.stringify({ action: "sendMessage", message: 'New message', data: newMessage, statusCode: 200 }));
+                    }
+                });
+            }
+            else {
+                ws.send(JSON.stringify({ action: "getMessage", message: "Message not found", statusCode: 404 }));
+            }
         }
         catch (e) {
             console.log(e);
