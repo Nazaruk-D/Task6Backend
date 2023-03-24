@@ -19,6 +19,9 @@ wss.on('connection', function connection(ws: any) {
         if (obj.action === 'setUserName') {
             ws.userName = obj.userName
         }
+        if (obj.action === 'fetchUsers') {
+            fetchUsers(ws);
+        }
     });
     ws.send(JSON.stringify('Hello, client!'));
 });
@@ -43,13 +46,27 @@ async function fetchMessages(ws: WebSocket, userName: string) {
     }
 }
 
+async function fetchUsers (ws: WebSocket) {
+    try {
+        const users = `SELECT name FROM Users;`;
+
+        connection.query(users, (error: any, results: any) => {
+            if (error) throw error;
+            // console.log(results)
+            ws.send(JSON.stringify({action: "fetchUsers", message: 'Users transfer was successful', data: results, statusCode: 200}));
+        });
+    } catch (e) {
+        console.log(e);
+        ws.send(JSON.stringify({message: 'Get users error', statusCode: 400}));
+    }
+}
+
 
 async function newMessage(ws: WebSocket, obj: any) {
     try {
         const {senderName, recipientName, subject, message} = obj.newObj;
         const newMessage = `INSERT INTO Messages (sender_name, recipient_name, subject, message) VALUES ('${senderName}', '${recipientName}', '${subject}', '${message}')`;
         connection.query(newMessage, async (error: any, res: any) => {
-
             const query = `SELECT * FROM Messages WHERE id = ${res.insertId}`;
             const results: any = await new Promise((resolve, reject) => {
                 connection.query(query, (error: any, results: any) => {

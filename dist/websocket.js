@@ -26,6 +26,9 @@ exports.wss.on('connection', function connection(ws) {
         if (obj.action === 'setUserName') {
             ws.userName = obj.userName;
         }
+        if (obj.action === 'fetchUsers') {
+            fetchUsers(ws);
+        }
     });
     ws.send(JSON.stringify('Hello, client!'));
 });
@@ -47,6 +50,23 @@ function fetchMessages(ws, userName) {
         catch (e) {
             console.log(e);
             ws.send(JSON.stringify({ message: 'Get messages error', statusCode: 400 }));
+        }
+    });
+}
+function fetchUsers(ws) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const users = `SELECT name FROM Users;`;
+            index_1.connection.query(users, (error, results) => {
+                if (error)
+                    throw error;
+                // console.log(results)
+                ws.send(JSON.stringify({ action: "fetchUsers", message: 'Users transfer was successful', data: results, statusCode: 200 }));
+            });
+        }
+        catch (e) {
+            console.log(e);
+            ws.send(JSON.stringify({ message: 'Get users error', statusCode: 400 }));
         }
     });
 }
