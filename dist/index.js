@@ -41,7 +41,8 @@ const corsOptions = {
 const jsonBodyMiddleWare = express_1.default.json();
 app.use(jsonBodyMiddleWare);
 app.use(cors(corsOptions));
-app.use(cookieParser('secret key'));
+// app.use(cookieParser('secret key'))
+app.use(cookieParser('secret key', { sameSite: 'none', secure: true }));
 app.use('/auth', authRouter);
 app.get("/", (req, res) => {
     res.json({ message: "hi from Express App" });
