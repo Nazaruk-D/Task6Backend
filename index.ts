@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser')
 const authRouter = require('./authRouter')
 const PORT = process.env.PORT || 7542;
 
-
 export const connection = mysql.createConnection({
     host: 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
     port: 4000,
@@ -39,19 +38,15 @@ const jsonBodyMiddleWare = express.json()
 
 app.use(jsonBodyMiddleWare)
 app.use(cors(corsOptions));
-
 app.use(cookieParser('secret key'))
 app.use('/auth', authRouter);
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-});
 
 app.get("/", (req, res) => {
     res.json({message: "hi from Express App"})
     return console.log('Connection closed')
 })
+
 
 app.listen(PORT, () => {
     console.log(`I started listening port: ${PORT}`)

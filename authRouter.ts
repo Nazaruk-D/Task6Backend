@@ -3,6 +3,7 @@ const controller = require('./authController')
 const router = new Router()
 const {check} = require("express-validator")
 
+
 const endPoints = {
     me: '/me',
     login: '/login',

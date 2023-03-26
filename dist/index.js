@@ -43,10 +43,6 @@ app.use(jsonBodyMiddleWare);
 app.use(cors(corsOptions));
 app.use(cookieParser('secret key'));
 app.use('/auth', authRouter);
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-});
 app.get("/", (req, res) => {
     res.json({ message: "hi from Express App" });
     return console.log('Connection closed');
