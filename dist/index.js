@@ -11,8 +11,6 @@ const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter');
 const PORT = process.env.PORT || 7542;
-const websocket_1 = require("./websocket");
-const PORTWS = process.env.PORT || 8080;
 exports.connection = mysql.createConnection({
     host: 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
     port: 4000,
@@ -43,11 +41,6 @@ const corsOptions = {
 const jsonBodyMiddleWare = express_1.default.json();
 app.use(jsonBodyMiddleWare);
 app.use(cors(corsOptions));
-// app.use('/auth', cors(corsOptions))
-// app.use(cors());
-app.use('/ws', (req, res) => {
-    /* обработка запроса WebSocket */
-});
 app.use(cookieParser('secret key'));
 app.use('/auth', authRouter);
 app.use((req, res, next) => {
@@ -57,9 +50,6 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     res.json({ message: "hi from Express App" });
     return console.log('Connection closed');
-});
-websocket_1.wss.on('listening', () => {
-    console.log(`WebSocket server is listening on port ${PORTWS}`);
 });
 app.listen(PORT, () => {
     console.log(`I started listening port: ${PORT}`);
